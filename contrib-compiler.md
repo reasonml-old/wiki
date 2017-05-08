@@ -16,7 +16,11 @@ Note currently our philosphy is to make release build as easy as possible, while
 - Having [https://nodejs.org/](NodeJS) installed
 - Having GNU Make installed
 - OS: Mac/Linux (Note BuckleScript works well on Windows, but the dev mode is not tested)
+- Our dev build depends on a submodule
 
+  ```sh
+  git submodule --update
+  ``` 
 
 All source code are in `jscomp` directory, below assume that you are working in `jscomp` directory.
 
@@ -50,16 +54,46 @@ All source code are in `jscomp` directory, below assume that you are working in 
 ## Dev-Build the compiler binaries
 `bspack` makes release build much easier, it is pretty slow during development since it does not do separate compilation. For dev build, we build each component and link them together.
 
-Please refer `./build.sh` for more details
+Please refer `./build.sh` for more details.
+
+Inside `build.sh`, it streamlined the whole process,
+first, it setup env vars, and checks all files type check:
+
+```sh
+make check
+```
+
+Then it link the compiler and build system
+```sh
+make bin/bsc.exe bin/bsb.exe
+```
+
+Note `make bin/bsc.exe` is different from `make -C bin bsc.exe`, the former is the dev build, the latter is the release build.
+
+Then it starts building libs
+```sh
+make libs
+```
+
+Then it starts building tests
+```
+make -C test all
+```
+
+After all these finished, it start snapshoting the changes using bspack, updating the dependency (prepare for the next build):
+
+```
+make depend snapshotml
+cd runtime; make depend; cd ..
+cd others; make depend; cd ..  
+```
 
 ## Release-build the compiler binaries
 
 All changes in compiler much be snapshot using `bspack.exe`, so  that in release build, all binaries are just one ocaml file.
 
-```sh
-make force-snapshotml
-```
 This target will snapshot your changes into such huge files like `bin/whole_compiler.ml`
 ```sh
 make -C bin all
+make libs
 ```
