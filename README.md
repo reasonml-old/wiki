@@ -20,3 +20,7 @@ There's also plenty of documentation that needs writing. For most all of the bin
 Or if you feel really adventurous, you could try your hand at contributing to the BuckleScript compiler or one of the Reason tools. See the respective contrbution guide for [BuckleScript](http://bucklescript.github.io/bucklescript/Manual.html#_contributions) or [Reason](https://github.com/facebook/reason#contributing).
 
 You could also write blog posts, do [conference talks](https://github.com/vramana/awesome-reasonml#reason-talks), make YouTube videos or just chat peoples ears off about how great this thing is!
+
+#### Contribution to the core compiler
+
+See  [here](./contrib-compiler.md)
